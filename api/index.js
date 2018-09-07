@@ -10,7 +10,7 @@ module.exports = (app) => {
   app.use('/users', users);
 
   // Register resource not found default route
-  app.use('*', (req, res, next) => {
+  app.use('*', (req, res) => {
     res.status(404).json({
       error: `Requested resource ${req.originalUrl} does not exist.`
     });
