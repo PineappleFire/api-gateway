@@ -20,16 +20,26 @@ const expect = chai.expect;
 
 const mockMongoWith = (value) => {
   return {
+    database: [],
     collection (_) {
       return {
-        insertOne (_) {
-          // mocked insertId
-          return { insertId: value };
+        insertOne (user) {
+          // database.push({
+          //   _id: database.length,
+          //   data: user
+          // });
+          // // mocked insertId
+          return new Promise((resolve, reject) => {
+
+            resolve({
+              insertId: value
+            });
+          });
         }
       };
     }
   }
-}
+};
 
 describe('User API Tests', () => {
 
@@ -120,7 +130,13 @@ describe('User API Tests', () => {
     });
   });
 
-  describe('Account Login/Logout', () => {
+  describe('Account Login', () => {
+    it('should log in a user with valid account details', async () => {
+
+    });
+  });
+
+  describe('Account Logout', () => {
 
   });
 
