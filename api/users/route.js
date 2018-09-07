@@ -5,13 +5,26 @@
  *  Handles all routing functionality for this endpoint
  */
 
-const router = require('express').Router();
+const Router = require('express-promise-router');
+const router = new Router();
+const {insertNewUser} = require('./logic');
 
 /*
  * Stub for `creating` new user account
  */
-router.post('/', (req, res, next) => {
-  next();
+router.post('/', async (req, res, next) => {
+  const mongoDB = req.app.locals.mongoDB;
+  try {
+    const id = await insertNewUser(req.body, mongoDB);
+    res.status(201).json({
+      id: id,
+      link: `/users/${id}`
+    });
+  } catch (err) {
+    res.status(err.statusCode).json({
+      error: err.details
+    });
+  };
 });
 
 /*
