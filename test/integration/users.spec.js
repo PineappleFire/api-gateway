@@ -44,7 +44,7 @@ describe('User API Tests', () => {
           password: 'WhatAGr8Day!',
           email: 'william.b.buffum@gmail.com'
         })
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/json');
 
       expect(response.statusCode).to.be.equal(201);
       expect(response.body.error).to.be.equal(undefined);
@@ -58,7 +58,7 @@ describe('User API Tests', () => {
       app.locals.mongoDB = mockMongoWith(insertId);
 
       const badPassword = 'hm';
-      const expectedError = `"password" with value "${badPassword}" fails to match the required pattern: /(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$/`
+      const expectedErrorMessage = `"password" with value "${badPassword}" fails to match the required pattern: /(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$/`
 
       const response = await request(app)
         .post('/users').send({
@@ -66,23 +66,58 @@ describe('User API Tests', () => {
           password: badPassword,
           email: 'william.b.buffum@gmail.com'
         })
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/json');
 
       expect(response.statusCode).to.be.equal(403);
       expect(response.body.error).to.not.be.equal(undefined);
       expect(response.body.error.name).to.be.equal('ValidationError');
-      expect(response.body.error.message).to.be.equal(expectedError);
+      expect(response.body.error.message).to.be.equal(expectedErrorMessage);
       expect(response.body).to.not.contain.keys(['id', 'link']);
-
     });
 
-    it('should only create an account with a valid email address', (done) =>
-      done()
-    );
+    it('should only create an account with a valid email address', async () => {
+      const insertId = 1;
+      app.locals.mongoDB = mockMongoWith(insertId);
 
-    it('should only create an account with a valid username', (done) =>
-      done()
-    );
+      const badEmail = 'thisIsABadEmailAddress.com';
+      const expectedErrorMessage = '"email" must be a valid email';
+
+      const response = await request(app)
+        .post('/users').send({
+          username: 'BillyBuffum',
+          password: 'goodPassword!',
+          email: badEmail
+        })
+        .set('Accept', 'application/json');
+
+      expect(response.statusCode).to.be.equal(403);
+      expect(response.body.error).to.not.be.equal(undefined);
+      expect(response.body.error.name).to.be.equal('ValidationError');
+      expect(response.body.error.message).to.be.equal(expectedErrorMessage);
+      expect(response.body).to.not.contain.keys(['id', 'link']);
+    });
+
+    it('should only create an account with a valid username', async () => {
+      const insertId = 1;
+      app.locals.mongoDB = mockMongoWith(insertId);
+
+      const badUsername = 'bad';
+      const expectedErrorMessage = '"username" length must be at least 5 characters long';
+
+      const response = await request(app)
+        .post('/users').send({
+          username: badUsername,
+          password: 'goodPassword!',
+          email: 'william.b.buffum@gmail.com'
+        })
+        .set('Accept', 'application/json');
+
+      expect(response.statusCode).to.be.equal(403);
+      expect(response.body.error).to.not.be.equal(undefined);
+      expect(response.body.error.name).to.be.equal('ValidationError');
+      expect(response.body.error.message).to.be.equal(expectedErrorMessage);
+      expect(response.body).to.not.contain.keys(['id', 'link']);
+    });
   });
 
   describe('Account Login/Logout', () => {
