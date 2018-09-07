@@ -1,21 +1,24 @@
-require('dotenv').config();
-const express = require('express');
-const bodyParser = require('body-parser');
-const mountRoutes = require('./api');
-
-const app = express();
+const {MongoClient} = require('mongodb');
+const app = require('./app');
 
 const port = process.env.PORT || 8080;
 
-// General setup
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+const mongoHost = process.env.MONGO_HOST;
+const mongoPort = process.env.MONGO_PORT || '27017';
+const mongoUser = process.env.MONGO_USER;
+const mongoPassword = process.env.MONGO_PASSWORD;
+const mongoDBName = process.env.MONGO_DB;
 
-mountRoutes(app);
+const mongoURL = `mongodb://${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}/${mongoDBName}`;
 
-// App started
-app.listen(port, () => {
-  console.log("== Server running on port:", port);
+MongoClient.connect(mongoURL, (err, client) => {
+  if (err) {
+    throw err;
+  }
+  app.locals.mongoDB = client.db(mongoDBName);
+
+  // Start app
+  app.listen(port, () => {
+    console.log("== Server running on port:", port);
+  });
 });
-
-module.exports = app;
