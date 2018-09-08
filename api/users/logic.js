@@ -9,7 +9,7 @@ const validate = (object, statusCode) => {
   return error ? buildError(error, statusCode) : null;
 };
 
-const insertNewUser = async (userObject) => {
+const insertNewUser = async userObject => {
   const {body: user, schema, mongoDB} = userObject;
 
   const error = validate(userObject, 403);
@@ -30,7 +30,7 @@ const insertNewUser = async (userObject) => {
   };
 };
 
-const login = async (loginObject) => {
+const login = async loginObject => {
   const {body: {username, password}, schema, mongoDB} = userObject;
 
   const error = validate(userObject, 403);
