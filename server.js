@@ -10,8 +10,7 @@ const mongoUser = process.env.MONGO_USER;
 const mongoPassword = process.env.MONGO_PASSWORD;
 const mongoDBName = process.env.MONGO_DB;
 
-const mongoURL = `mongodb://${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}/${mongoDBName}`;
-
+console.error("url: ", mongoURL);
 MongoClient.connect(mongoURL, (err, client) => {
   if (err) {
     throw err;

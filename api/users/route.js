@@ -12,7 +12,7 @@ const {insertNewUser} = require('./logic');
 /*
  * Stub for `creating` new user account
  */
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res) => {
   const mongoDB = req.app.locals.mongoDB;
   try {
     const id = await insertNewUser(req.body, mongoDB);
