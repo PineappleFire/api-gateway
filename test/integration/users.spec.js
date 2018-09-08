@@ -20,7 +20,6 @@ const expect = chai.expect;
 
 const mockMongoWith = (value) => {
   return {
-    database: [],
     collection (_) {
       return {
         insertOne (user) {
