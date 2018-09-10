@@ -53,8 +53,10 @@ router.post('/login', async (req, res) => {
 /*
  * Stub for `getting` account details
  */
-router.get('/:id', (req, res, next) => {
-  next();
+router.get('/:id', (req, res) => {
+  res.status(404).json({
+    error: 'User details not implemented yet'
+  });
 });
 
 module.exports = router;

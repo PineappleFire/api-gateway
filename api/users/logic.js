@@ -24,22 +24,23 @@ const insertNewUser = async userObject => {
     const userCollection = mongoDB.collection('users');
     const result = await userCollection.insertOne(user);
 
-    return result.insertId;
+    // TODO: Determine if HATEOAS should provide id or username
+    return user.username;
   } catch (err) {
     return Promise.reject(buildError(err, 500));
   };
 };
 
 const login = async loginObject => {
-  const {body: {username, password}, schema, mongoDB} = userObject;
+  const {body: {username, password}, schema, mongoDB} = loginObject;
 
-  const error = validate(userObject, 403);
+  const error = validate(loginObject, 403);
   if (error) {
     return Promise.reject(error);
   }
 
   try {
-    const userCollection = mongoDB.collection('user');
+    const userCollection = mongoDB.collection('users');
     const results = await userCollection.find({username: username}).toArray();
     const user = results[0];
 

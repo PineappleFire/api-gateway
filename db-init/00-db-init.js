@@ -5,7 +5,3 @@ db.createUser({
     { role: "readWrite", db: "users" }
   ]
 });
-
-db.users.insert({
-  name: "pineapplefire"
-});
