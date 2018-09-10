@@ -22,6 +22,12 @@ const insertNewUser = async userObject => {
     user.password = passwordHash;
 
     const userCollection = mongoDB.collection('users');
+    const results = await userCollection.find({username: user.username}).toArray();
+
+    if (results.length > 0) {
+      return Promise.reject(buildError('Username already taken', 401));
+    }
+
     const result = await userCollection.insertOne(user);
 
     // TODO: Determine if HATEOAS should provide id or username
