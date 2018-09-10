@@ -30,8 +30,7 @@ const insertNewUser = async userObject => {
 
     const result = await userCollection.insertOne(user);
 
-    // TODO: Determine if HATEOAS should provide id or username
-    return user.username;
+    return {id: result.insertedId, token: await generateAuthToken(result.insertedId)};
   } catch (err) {
     return Promise.reject(buildError(err, 500));
   };

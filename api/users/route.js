@@ -21,9 +21,10 @@ const packager = ({body}, schema, {mongoDB}) => {
 router.post('/', async (req, res) => {
   const userObject = packager(req, 'user', req.app.locals)
   try {
-    const id = await insertNewUser(userObject);
+    const {id, token} = await insertNewUser(userObject);
     res.status(201).json({
       id: id,
+      token: token,
       link: `/users/${id}`
     });
   } catch (err) {
