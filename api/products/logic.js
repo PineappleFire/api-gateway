@@ -2,17 +2,12 @@ const {pick} = require('underscore');
 const {validator} = require('./model');
 const {buildError} = require('./../../lib/utils');
 
-const validate = (object, statusCode) => {
-  const error = validator(pick(object, ['body', 'schema']));
-  return error ? buildError(error, statusCode) : null;
-};
-
 const insertNewProduct = async productObject => {
   const {body: product, schema, mongoDB} = productObject;
 
-  const error = validate(productObject, 403);
+  const error = validator(pick(productObject, ['body', 'schema']));
   if (error) {
-    return Promise.reject(error);
+    return Promise.reject(buildError(error, 403));
   }
 
   try {
