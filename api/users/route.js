@@ -7,19 +7,12 @@
 const Router = require('express-promise-router');
 const router = new Router();
 const {insertNewUser, login} = require('./logic');
-
-const packager = ({body}, schema, {mongoDB}) => {
-  return {
-    schema: schema,
-    body: body,
-    mongoDB: mongoDB
-  };
-}
+const {packager} = require('../../lib/utils');
 /*
  * Stub for `creating` new user account
  */
 router.post('/', async (req, res) => {
-  const userObject = packager(req, 'user', req.app.locals)
+  const userObject = packager(req, 'user', req.app.locals);
   try {
     const {id, token} = await insertNewUser(userObject);
     res.status(201).json({

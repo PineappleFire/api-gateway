@@ -3,11 +3,13 @@
  */
 
 const users = require('./users/route');
+const products = require('./products/route');
 
 module.exports = app => {
 
   // Register users route
   app.use('/users', users);
+  app.use('/products', products);
 
   // Register resource not found default route
   app.use('*', (req, res) =>
