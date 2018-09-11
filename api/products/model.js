@@ -1,10 +1,16 @@
 const Joi = require('joi');
 
+const productTypes = [
+  'icons'
+];
+
 const schema = {
   product: Joi.object().keys({
     name: Joi.string().required(),
+    category: Joi.string().valid(productTypes).required(),
     data: Joi.string().required()
-  })
+  }),
+  category: Joi.string().valid(productTypes).required()
 };
 
 const product = {
