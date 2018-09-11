@@ -12,14 +12,14 @@ const {packager} = require('../../lib/utils');
 
 router.post('/upload', requireAuthentication, async (req, res) => {
   const productObject = packager(req, 'product', req.app.locals);
-  productObject.ownerId = req.userId;
+  productObject.body.ownerId = req.userId;
   try {
     const id = await insertNewProduct(productObject);
     res.status(201).json({
       id: id,
       links: {
         productLink: `/products/${id}`,
-        ownerLink: `/users/${productObject.ownerId}`
+        ownerLink: `/users/${productObject.body.ownerId}`
       }
     });
   } catch (err) {
@@ -34,7 +34,7 @@ router.get('/:category', async (req, res) => {
     const results = await getProducts(req.query, req.params.category, req.app.locals.mongoDB);
     const {page, totalPages} = results;
     const links = {};
-    
+
     if (page < totalPages) {
       links.nextPage = `/products/${req.params.category}?page=${page+1}`;
       links.lastPage = `/products/${req.params.category}?page=${totalPages}`;

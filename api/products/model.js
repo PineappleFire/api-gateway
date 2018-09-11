@@ -8,7 +8,8 @@ const schema = {
   product: Joi.object().keys({
     name: Joi.string().required(),
     category: Joi.string().valid(productTypes).required(),
-    data: Joi.string().required()
+    data: Joi.string().required(),
+    ownerId: Joi.string().required()
   }),
   category: Joi.string().valid(productTypes).required()
 };
